@@ -468,6 +468,9 @@ $ ls -la /run/secrets
 lrwxrwxrwx 16 root 12 Jul  6:23  /run/secrets -> /run/secrets.d/1
 ```
 
+Note that `/run/secrets.d` is mounted read-only and will only be remounted for read-write
+access while a new generation of secrets is being deployed.
+
 </details>
 
 ## Set secret permission/owner and allow services to access it
