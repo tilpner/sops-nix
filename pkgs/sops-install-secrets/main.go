@@ -17,6 +17,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"os/exec"
 
 	"github.com/Mic92/sops-nix/pkgs/sops-install-secrets/sshkeys"
 	agessh "github.com/Mic92/ssh-to-age"
@@ -993,6 +994,10 @@ func installSecrets(args []string) error {
 	if err := pruneGenerations(manifest.SecretsMountPoint, *secretDir, manifest.KeepGenerations); err != nil {
 		return fmt.Errorf("Cannot prune old secrets generations: %w", err)
 	}
+	cmd := exec.Command("lsof", "/run/secrets.d")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+
 	if err := ensureSecretFs(manifest.SecretsMountPoint, true, keysGid); err != nil {
 		fmt.Printf("warning: cannot remount the secrets readonly (maybe blocked by a process?): %s\n", err)
 	}
